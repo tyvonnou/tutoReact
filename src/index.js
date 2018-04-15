@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
-  // Si le joueur a gagne les case gagnantes doivent s'allumer
+  // Si le joueur a gagne les cases gagnantes doivent s'allumer
   if (props.highlight) {
     return (
-      <button className="square" style={{color: "green"}} onClick={() => props.onClick()}>
+      <button className="square" style={{color: "orange"}} onClick={() => props.onClick()}>
       {props.value}
       </button>
     );
@@ -108,7 +108,7 @@ class Game extends React.Component {
     let status;
     let winningPos;
     if (winner) {
-      status = 'Winner: ' + winner;
+      status = 'Winner: ' + winner.winner;
       winningPos = winner.winningPos;
     } else {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
