@@ -2,14 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+// Définition des carrés
 function Square(props) {
   // Si le joueur a gagne les cases gagnantes doivent s'allumer
   if (props.highlight) {
     return (
-      <button className="square" style={{color: "orange"}} onClick={() => props.onClick()}>
+      <button className="square" style={{color: "green"}} onClick={() => props.onClick()}>
       {props.value}
       </button>
     );
+  // Sinon les case ne s'allume pas
   } else {
     return (
       <button className="square" onClick={() => props.onClick()}>
@@ -19,19 +21,23 @@ function Square(props) {
   }
 }
 
+// Définition du tableau
 class Board extends React.Component {
   renderSquare(i) {
+    // On déclare won à faux
     let won = false;
+    // Si la position est gagnate alors
     if (this.props.winningPos && this.props.winningPos.indexOf(i) >= 0) {
-      // Si il y a une ligne gagnante
+      // on déclare won à vrai
       won = true;
     }
+    // on retourne le carré
     return <Square key={i} value={this.props.squares[i]} highlight={won} onClick={() => this.props.onClick(i)} />;
   }
 
   render() {
     let status;
-    // Rendu du tableau
+    // Rendu du tableau avec les différents carrés
     return (
       <div>
       <div className="board-row">
@@ -54,7 +60,9 @@ class Board extends React.Component {
   }
 }
 
+// Définition du jeu
 class Game extends React.Component {
+  // Constructeur
   constructor(props) {
     super(props);
     this.state = {
@@ -65,7 +73,7 @@ class Game extends React.Component {
       xIsNext: true,
     };
   }
-
+  // Historique
   jumpTo(step) {
     this.setState({
       stepNumber: step,
@@ -94,7 +102,7 @@ class Game extends React.Component {
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
-    const winner = calculateWinner(current.squares);
+    const win = calculateWinner(current.squares);
     const moves = history.map((step, move) => {
       const desc = move ?
       'Go to move #' + move :
@@ -107,9 +115,9 @@ class Game extends React.Component {
     });
     let status;
     let winningPos;
-    if (winner) {
-      status = 'Winner: ' + winner.winner;
-      winningPos = winner.winningPos;
+    if (win) {
+      status = 'Winner: ' + win.winner;
+      winningPos = win.winningPos;
     } else {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
@@ -133,13 +141,9 @@ class Game extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <Game />,
-  document.getElementById('root')
-);
-
 //  Fonction qui permet de calculer le gagnant avec les différentes combinaisons possibles
 function calculateWinner(squares) {
+  //Définition des positions gagnantes
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -153,6 +157,7 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      // Je retourne le gagant et les positions gagnantes
       return {
         winner: squares[a],
         winningPos: lines[i]
@@ -161,3 +166,8 @@ function calculateWinner(squares) {
   }
   return null;
 }
+
+ReactDOM.render(
+  <Game />,
+  document.getElementById('root')
+);
